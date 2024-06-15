@@ -63,72 +63,113 @@ const Register = () => {
           email: "",
         });
         setRegMessage(
-          "Registration successful! Redirecting you to the sign-in page..."
+          "Account created! Redirecting to sign-in..."
         );
         setTimeout(() => {
           navigate("/login");
         }, 3000);
       } else {
         const data = await response.json();
-        setRegMessage(`Registration failed: ${data.message}`);
+        if (response.status === 400) {
+          const errorMessage = data.error || "Username or email already exists";
+          setRegMessage(errorMessage);
+        } else {
+          setRegMessage(`Registration failed: ${data.message}`);
+        }
       }
     } catch (error) {
       setIsLoading(false);
-      console.error("Error", error);
-      setRegMessage("Registration failed due to a network error.");
+      console.error("Network error:", error);
+      setRegMessage(
+        "Registration failed due to a network error. Please try again later."
+      );
     }
   };
 
   return (
-    <div>
-      <h3>Register here!</h3>
-      {regMessage && <p>{regMessage}</p>}
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username
-          <input
-            type="text"
-            name="username"
-            placeholder="Choose a unique username"
-            value={userData.username}
-            onChange={handleChange}
-            required
-            disabled={isLoading} // Disable input during loading
-          />
-        </label>
-        <br />
-        <label>
-          Password
-          <input
-            type="password"
-            name="password"
-            placeholder="Enter a strong password"
-            value={userData.password}
-            onChange={handleChange}
-            required
-            disabled={isLoading} // Disable input during loading
-          />
-        </label>
-        <br />
-        <label>
-          Email
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter your email address"
-            value={userData.email}
-            onChange={handleChange}
-            required
-            disabled={isLoading} // Disable input during loading
-          />
-        </label>
-        <br />
-        <button type="submit" disabled={isLoading}>
-          {" "}
-          {/* Disable button during loading */}
-          {isLoading ? "Registering..." : "Register"}
-        </button>
-      </form>
+    <div className="flex items-center justify-center h-screen">
+      <div className="max-w-[400px] p-6 bg-white shadow-md rounded-md flex flex-col justify-between">
+        <h5 className="my-6 text-xl font-semibold text-black">Signup</h5>
+        {regMessage && <p className="mb-4 text-red-500">{regMessage}</p>}
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="username" className="text-base font-semibold text-black">
+              Username:
+            </label>
+            <input
+              className="w-full mt-3 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-200 focus:border-indigo-600"
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Choose a unique username"
+              value={userData.username}
+              onChange={handleChange}
+              required
+              disabled={isLoading} // Disable input during loading
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="password" className="text-base font-semibold text-black">
+              Password
+            </label>
+            <input
+              className="w-full mt-3 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-200 focus:border-indigo-600"
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Set a password"
+              value={userData.password}
+              onChange={handleChange}
+              required
+              disabled={isLoading} // Disable input during loading
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="email" className="text-base font-semibold text-black">
+              Email
+            </label>
+            <input
+              className="w-full mt-3 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-200 focus:border-indigo-600"
+              type="email"
+              id="email"
+              name="email"
+              placeholder="name@example.com"
+              value={userData.email}
+              onChange={handleChange}
+              required
+              disabled={isLoading} // Disable input during loading
+            />
+          </div>
+          <div className="mb-4">
+            <div className="flex items-center w-full mb-0">
+              <input
+                type="checkbox"
+                name="checkbox"
+                id="checkbox"
+                className="rounded border-gray-200 text-indigo-600 focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50 me-2"
+              />
+              <label htmlFor="checkbox" className="text-slate-400">
+                I Accept
+                <a href="" className="text-indigo-600"> Terms And Conditions</a>
+              </label>
+            </div>
+          </div>
+          <div className="mb-4">
+            <button
+              type="submit"
+              className="py-2 px-5 inline-block tracking-wide border align-middle duration-500 text-base text-center bg-indigo-600 hover:bg-indigo-700 border-indigo-600 hover:border-indigo-700 text-white rounded-md w-full"
+              disabled={isLoading}
+            >
+              {/* Disable button during loading */}
+              {isLoading ? "Submitting..." : "Submit"}
+            </button>
+            <div className="text-center mt-2">
+              <span className="text-slate-400 me-2">Already have an account?</span>
+              <a href="/login" className="text-black font-bold inline-block">Sign in</a>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
