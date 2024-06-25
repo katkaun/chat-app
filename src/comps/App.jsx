@@ -1,11 +1,14 @@
+import Switch from "../Switch";
+import { AuthProvider } from "../context/AuthProvider";
 import Layout from "./Layout";
-import Register from "./Register";
 
 function App() {
   return (
-    <Layout>
-      <Register />
-    </Layout>
+    <AuthProvider>
+      <Layout>
+        <Switch />
+      </Layout>
+    </AuthProvider>
   );
 }
 

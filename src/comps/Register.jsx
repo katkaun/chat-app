@@ -6,6 +6,7 @@ const Register = () => {
     username: "",
     password: "",
     email: "",
+    avatar: "",
   });
   const [csrfToken, setCsrfToken] = useState("");
   const [regMessage, setRegMessage] = useState("");
@@ -62,9 +63,7 @@ const Register = () => {
           password: "",
           email: "",
         });
-        setRegMessage(
-          "Account created! Redirecting to sign-in..."
-        );
+        setRegMessage("Account created! Redirecting to sign-in...");
         setTimeout(() => {
           navigate("/login");
         }, 3000);
@@ -90,10 +89,21 @@ const Register = () => {
     <div className="flex items-center justify-center h-screen">
       <div className="max-w-[400px] p-6 bg-white shadow-md rounded-md flex flex-col justify-between">
         <h5 className="my-6 text-xl font-semibold text-black">Signup</h5>
-        {regMessage && <p className="mb-4 text-red-500">{regMessage}</p>}
+        {regMessage && (
+          <p
+            className={`mb-4 ${
+              regMessage.includes("created") ? "text-green-500" : "text-red-500"
+            }`}
+          >
+            {regMessage}
+          </p>
+        )}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="username" className="text-base font-semibold text-black">
+            <label
+              htmlFor="username"
+              className="text-base font-semibold text-black"
+            >
               Username:
             </label>
             <input
@@ -109,7 +119,10 @@ const Register = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="password" className="text-base font-semibold text-black">
+            <label
+              htmlFor="password"
+              className="text-base font-semibold text-black"
+            >
               Password
             </label>
             <input
@@ -125,7 +138,10 @@ const Register = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="email" className="text-base font-semibold text-black">
+            <label
+              htmlFor="email"
+              className="text-base font-semibold text-black"
+            >
               Email
             </label>
             <input
@@ -150,7 +166,10 @@ const Register = () => {
               />
               <label htmlFor="checkbox" className="text-slate-400">
                 I Accept
-                <a href="" className="text-indigo-600"> Terms And Conditions</a>
+                <a href="" className="text-indigo-600 hover:text-blue-500">
+                  {" "}
+                  Terms And Conditions
+                </a>
               </label>
             </div>
           </div>
@@ -164,8 +183,12 @@ const Register = () => {
               {isLoading ? "Submitting..." : "Submit"}
             </button>
             <div className="text-center mt-2">
-              <span className="text-slate-400 me-2">Already have an account?</span>
-              <a href="/login" className="text-black font-bold inline-block">Sign in</a>
+              <span className="text-slate-400 me-2">
+                Already have an account?
+              </span>
+              <a href="/login" className="underline text-indigo-600 hover:text-blue-500">
+                Sign In
+              </a>
             </div>
           </div>
         </form>
