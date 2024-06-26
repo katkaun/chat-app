@@ -22,16 +22,19 @@ const Login = () => {
     setLoginMessage("");
   }, [userName, password]);
 
-   // Fetch CSRF token when the component mounts
-   useEffect(() => {
+  // Fetch CSRF token when the component mounts
+  useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
-        const response = await fetch("https://chatify-api.up.railway.app/csrf", {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          "https://chatify-api.up.railway.app/csrf",
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (response.ok) {
           const data = await response.json();
@@ -45,7 +48,7 @@ const Login = () => {
     };
 
     fetchCsrfToken();
-  }, []); 
+  }, []);
 
   const handleUserNameChange = (e) => {
     setUserName(e.target.value);
@@ -84,17 +87,17 @@ const Login = () => {
         localStorage.setItem("avatar", data.avatar);
 
         setAuth({
-            token: data.token,
-            userId: data.id,
-            userName: userName,
-            avatar: data.avatar,
-        })
+          token: data.token,
+          userId: data.id,
+          userName: userName,
+          avatar: data.avatar,
+        });
 
         setLoginMessage(`Welcome ${userName}! Redirecting to chat...`);
         setLoggedIn(true);
 
         setTimeout(() => {
-          navigate("/");
+          navigate("/chat");
         }, 3000);
       } else if (response.status === 401) {
         const errorData = await response.json();
@@ -165,7 +168,7 @@ const Login = () => {
           <div className="mb-4">
             <button
               type="submit"
-              className="py-2 px-5 inline-block tracking-wide border align-middle duration-500 text-base text-center bg-indigo-600 hover:bg-indigo-700 border-indigo-600 hover:border-indigo-700 text-white rounded-md w-full"
+              className="py-2 px-5 inline-block tracking-wide border align-middle duration-500 text-base text-center bg-indigo-600 hover:bg-indigo-800 border-indigo-600 hover:border-indigo-700 text-white rounded-md w-full"
             >
               Sign In
             </button>
@@ -175,7 +178,7 @@ const Login = () => {
           <span className="text-slate-400 mr-2">Need an Account?</span>
           <a
             href="/register"
-            className="underline text-indigo-600 hover:text-blue-500"
+            className="underline text-indigo-600 hover:text-indigo-800"
           >
             Sign Up
           </a>

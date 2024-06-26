@@ -36,10 +36,13 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const username = userData.username.trim()
+    const randomAvatar = `https://api.multiavatar.com/${username}.svg`;
     // CSRF token included in request payload
     setIsLoading(true);
     const payload = {
       ...userData,
+      avatar: randomAvatar,
       csrfToken,
     };
 
@@ -62,6 +65,7 @@ const Register = () => {
           username: "",
           password: "",
           email: "",
+          avatar: randomAvatar,
         });
         setRegMessage("Account created! Redirecting to sign-in...");
         setTimeout(() => {
@@ -166,7 +170,7 @@ const Register = () => {
               />
               <label htmlFor="checkbox" className="text-slate-400">
                 I Accept
-                <a href="" className="text-indigo-600 hover:text-blue-500">
+                <a href="" className="text-indigo-600 hover:text-indigo-800">
                   {" "}
                   Terms And Conditions
                 </a>
@@ -176,7 +180,7 @@ const Register = () => {
           <div className="mb-4">
             <button
               type="submit"
-              className="py-2 px-5 inline-block tracking-wide border align-middle duration-500 text-base text-center bg-indigo-600 hover:bg-indigo-700 border-indigo-600 hover:border-indigo-700 text-white rounded-md w-full"
+              className="py-2 px-5 inline-block tracking-wide border align-middle duration-500 text-base text-center bg-indigo-600 hover:bg-indigo-800 border-indigo-600 hover:border-indigo-700 text-white rounded-md w-full"
               disabled={isLoading}
             >
               {/* Disable button during loading */}
@@ -186,7 +190,10 @@ const Register = () => {
               <span className="text-slate-400 me-2">
                 Already have an account?
               </span>
-              <a href="/login" className="underline text-indigo-600 hover:text-blue-500">
+              <a
+                href="/login"
+                className="underline text-indigo-600 hover:text-indigo-800"
+              >
                 Sign In
               </a>
             </div>

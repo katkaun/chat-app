@@ -1,14 +1,16 @@
 import { Route, Routes } from "react-router-dom"
 import Login from "./comps/Login";
 import Register from "./comps/Register";
-import Home from "./comps/Home";
+import Chat from "./comps/Chat";
+import SetAvatar from "./comps/SetAvatar";
 
 const Switch = () => {
     return(
         <Routes>
-            <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/setAvatar" element={<SetAvatar />} />
+            <Route path="/" element={<Chat />} />
         </Routes>
     )
 }
