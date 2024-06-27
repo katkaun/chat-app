@@ -3,14 +3,13 @@ import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthProvider";
 
 const Login = () => {
-  const { setAuth } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const userRef = useRef();
   const errRef = useRef();
 
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [loginMessage, setLoginMessage] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
   const [csrfToken, setCsrfToken] = useState("");
   const navigate = useNavigate();
 
@@ -81,12 +80,7 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json();
 
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", data.id);
-        localStorage.setItem("userName", userName);
-        localStorage.setItem("avatar", data.avatar);
-
-        setAuth({
+        login({
           token: data.token,
           userId: data.id,
           userName: userName,
@@ -94,7 +88,6 @@ const Login = () => {
         });
 
         setLoginMessage(`Welcome ${userName}! Redirecting to chat...`);
-        setLoggedIn(true);
 
         setTimeout(() => {
           navigate("/chat");
