@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "react-avatar-editor": "^13.0.2",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.23.1"
+    "react-router-dom": "^6.23.1",
+    "react-webcam": "^7.2.0"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.7",

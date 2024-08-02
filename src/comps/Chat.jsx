@@ -1,5 +1,11 @@
+import { Link } from "react-router-dom";
+
 const Chat = () => {
-  return <h1>Chat</h1>;
+  return (
+    <div>
+      <Link to="/profile">Profile</Link>
+    </div>
+  );
 };
 
 export default Chat;

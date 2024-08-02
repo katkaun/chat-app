@@ -1,19 +1,18 @@
 import { Route, Routes } from "react-router-dom";
+import ProtectedRoute from "./utils/ProtectedRoute";
 import Login from "./comps/Login";
 import Register from "./comps/Register";
 import Chat from "./comps/Chat";
-import SetAvatar from "./comps/SetAvatar";
-import ProtectedRoute from "./utils/ProtectedRoute";
+import Profile from "./comps/Profile";
 
 const Switch = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-
       {/* Protected routes */}
       <Route element={<ProtectedRoute />}>
-        <Route path="/setAvatar" element={<SetAvatar />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/" element={<Chat />} />
       </Route>
     </Routes>

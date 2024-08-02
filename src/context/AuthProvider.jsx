@@ -51,8 +51,17 @@ export const AuthProvider = ({ children }) => {
     navigate("/login");
   };
 
+  const updateAvatar = (newAvatar) => {
+    console.log("Updating avatar to:", newAvatar); // Debugging line
+    localStorage.setItem("avatar", newAvatar);
+    setAuth((prevAuth) => ({
+      ...prevAuth,
+      avatar: newAvatar,
+    }));
+  };
+
   return (
-    <AuthContext.Provider value={{ auth, setAuth, login, logout }}>
+    <AuthContext.Provider value={{ auth, setAuth, login, logout, updateAvatar }}>
       {children}
     </AuthContext.Provider>
   );
