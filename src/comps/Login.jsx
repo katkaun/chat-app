@@ -7,10 +7,10 @@ const Login = () => {
   const userRef = useRef();
   const errRef = useRef();
 
-  const [userName, setUserName] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginMessage, setLoginMessage] = useState("");
-  const [csrfToken, setCsrfToken] = useState("");
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,38 +19,10 @@ const Login = () => {
 
   useEffect(() => {
     setLoginMessage("");
-  }, [userName, password]);
+  }, [username, password]);
 
-  // Fetch CSRF token when the component mounts
-  useEffect(() => {
-    const fetchCsrfToken = async () => {
-      try {
-        const response = await fetch(
-          "https://chatify-api.up.railway.app/csrf",
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          setCsrfToken(data.csrfToken);
-        } else {
-          console.error("Failed to fetch CSRF token:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error fetching CSRF token:", error);
-      }
-    };
-
-    fetchCsrfToken();
-  }, []);
-
-  const handleUserNameChange = (e) => {
-    setUserName(e.target.value);
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -59,51 +31,14 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log(userName, password);
+    console.log("Attempting login with username:", username);
 
     try {
-      const response = await fetch(
-        "https://chatify-api.up.railway.app/auth/token",
-        {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({
-            username: userName,
-            password: password,
-            csrfToken: csrfToken,
-          }),
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-
-        login({
-          token: data.token,
-          userId: data.id,
-          userName: userName,
-          avatar: data.avatar,
-        });
-
-        setLoginMessage(`Welcome ${userName}! Redirecting to chat...`);
-
-        setTimeout(() => {
-          navigate("/chat");
-        }, 3000);
-      } else if (response.status === 401) {
-        const errorData = await response.json();
-        setLoginMessage(errorData.error || "Invalid username or password");
-      } else if (response.status === 403) {
-        setLoginMessage("Access forbidden. Please contact support.");
-      } else {
-        console.error("Error:", response.statusText);
-        setLoginMessage("Failed to log in. Please try again later.");
-      }
+      await login(username, password);
+      setLoginMessage(`Welcome ${username}! Redirecting to chat...`);
+      setTimeout(() => navigate("/chat"), 3000);
     } catch (error) {
-      console.error("Error:", error);
-      setLoginMessage("Failed to log in due to a network error.");
+      setLoginMessage(error.message);
     }
   };
 
@@ -112,11 +47,7 @@ const Login = () => {
       <div className="max-w-[400px] p-6 bg-white shadow-md rounded-md flex flex-col justify-between">
         <h5 className="my-6 text-xl font-semibold text-black">Sign In</h5>
         {loginMessage && (
-          <p
-            ref={errRef}
-            className="mb-4 text-red-600 text-center"
-            aria-live="assertive"
-          >
+          <p className="mb-4 text-indigo-600 text-center" aria-live="assertive">
             {loginMessage}
           </p>
         )}
@@ -135,8 +66,8 @@ const Login = () => {
               placeholder="username"
               ref={userRef}
               autoComplete="off"
-              onChange={handleUserNameChange}
-              value={userName}
+              onChange={handleUsernameChange}
+              value={username}
               required
             />
           </div>

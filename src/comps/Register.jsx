@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import AuthContext, { fetchCsrfToken } from "../context/AuthProvider";
 
 const Register = () => {
   const [userData, setUserData] = useState({
@@ -12,18 +13,18 @@ const Register = () => {
   const [regMessage, setRegMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { register } = useContext(AuthContext);
 
-  // Fetch CSRF token when the component mounts
   useEffect(() => {
-    fetch("https://chatify-api.up.railway.app/csrf", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => setCsrfToken(data.csrfToken))
-      .catch((error) => console.error("Failed to fetch CSRF token:", error));
+    const getCsrfToken = async () => {
+      try {
+        const token = await fetchCsrfToken();
+        setCsrfToken(token);
+      } catch (error) {
+        console.error("Failed to fetch CSRF token:", error);
+      }
+    };
+    getCsrfToken();
   }, []);
 
   const handleChange = (e) => {
@@ -36,9 +37,9 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const username = userData.username.trim()
+    const username = userData.username.trim();
     const randomAvatar = `https://api.multiavatar.com/${username}.svg`;
-    // CSRF token included in request payload
+
     setIsLoading(true);
     const payload = {
       ...userData,
@@ -46,49 +47,25 @@ const Register = () => {
       csrfToken,
     };
 
-    try {
-      const response = await fetch(
-        "https://chatify-api.up.railway.app/auth/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
-      setIsLoading(false); // Reset loading state
+    console.log("Submitting registration with payload:", payload);
 
-      if (response.ok) {
-        // Clear input fields
-        setUserData({
-          username: "",
-          password: "",
-          email: "",
-          avatar: randomAvatar,
-        });
-        setRegMessage("Account created! Redirecting to sign-in...");
-        setTimeout(() => {
-          navigate("/login");
-        }, 3000);
-      } else {
-        const data = await response.json();
-        if (response.status === 400) {
-          const errorMessage = data.error || "Username or email already exists";
-          setRegMessage(errorMessage);
-        } else {
-          setRegMessage(`Registration failed: ${data.message}`);
-        }
-      }
+    try {
+      await register(payload);
+      setIsLoading(false);
+      setUserData({
+        username: "",
+        password: "",
+        email: "",
+        avatar: randomAvatar,
+      });
+      setRegMessage("Account created! Redirecting to sign-in...");
+      setTimeout(() => navigate("/login"), 3000);
     } catch (error) {
       setIsLoading(false);
-      console.error("Network error:", error);
-      setRegMessage(
-        "Registration failed due to a network error. Please try again later."
-      );
+      setRegMessage(error.message);
     }
   };
-
+  
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="max-w-[400px] p-6 bg-white shadow-md rounded-md flex flex-col justify-between">
