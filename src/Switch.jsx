@@ -4,17 +4,19 @@ import Login from "./comps/Login";
 import Register from "./comps/Register";
 import Chat from "./comps/Chat";
 import Profile from "./comps/Profile";
+import NotFound from "./comps/NotFound";
 
 const Switch = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      {/* Protected routes */}
       <Route element={<ProtectedRoute />}>
         <Route path="/profile" element={<Profile />} />
-        <Route path="/" element={<Chat />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/" element={<Chat />} /> 
       </Route>
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
