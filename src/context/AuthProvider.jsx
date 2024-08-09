@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext({});
@@ -9,7 +9,9 @@ export const fetchCsrfToken = async () => {
   try {
     const response = await fetch(`${BASE_URL}/csrf`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
 
     if (!response.ok) {
@@ -54,6 +56,25 @@ const registerUser = async (payload) => {
   }
 };
 
+const decodeJwtToken = (token) => {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    const decoded = JSON.parse(jsonPayload);
+    console.log("Decoded JWT token:", decoded); // Log the entire decoded token
+    return decoded;
+  } catch (error) {
+    console.error("Error decoding JWT token:", error.message);
+    return {};
+  }
+};
+
 const loginUser = async (payload) => {
   console.log("Logging in with payload:", payload);
 
@@ -70,13 +91,14 @@ const loginUser = async (payload) => {
     }
 
     const result = await response.json();
-    console.log("User logged in successfully:", result);
+    console.log("Full login response:", result); // Log the entire response object
     return result;
   } catch (error) {
     console.error("Error logging in user:", error.message);
     throw error;
   }
 };
+
 
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(() => {
@@ -86,33 +108,44 @@ export const AuthProvider = ({ children }) => {
     const avatar = localStorage.getItem("avatar");
     const email = localStorage.getItem("email");
 
-    return token && userId ? { token, userId, username, avatar, email } : {};
+    return token ? { token, userId, username, avatar, email } : {};
   });
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const userId = localStorage.getItem("userId");
-      const username = localStorage.getItem("username");
-      const avatar = localStorage.getItem("avatar");
-      const email = localStorage.getItem("email");
-      setAuth({ token, userId, username, avatar, email });
-    }
-  }, []);
-
   const login = async (username, password) => {
     try {
-      const csrfToken = await fetchCsrfToken(); // Fetch CSRF token here
+      // Fetch CSRF token
+      const csrfToken = await fetchCsrfToken();
+  
+      // Log in and get token
       const result = await loginUser({ username, password, csrfToken });
-      localStorage.setItem("token", result.token);
-      localStorage.setItem("userId", result.userId);
-      localStorage.setItem("username", result.username);
-      localStorage.setItem("avatar", result.avatar);
-      localStorage.setItem("email", result.email);
-
-      setAuth(result);
+      const { token } = result;
+  
+      // Decode JWT token to get user details
+      const decodedToken = decodeJwtToken(token);
+  
+      // Use decoded token data
+      const userId = decodedToken.id;
+      const userName = decodedToken.user;
+      const avatar = decodedToken.avatar;
+      const email = decodedToken.email;
+  
+      // Handle user info
+      localStorage.setItem("token", token);
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("username", userName); 
+      localStorage.setItem("avatar", avatar);
+      localStorage.setItem("email", email);
+  
+      setAuth({
+        token,
+        userId,
+        username: userName,
+        avatar,
+        email,
+      });
+  
       navigate("/chat");
     } catch (error) {
       console.error("Login error:", error.message);
@@ -130,6 +163,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("email", result.email);
 
       setAuth(result);
+
       navigate("/chat");
     } catch (error) {
       console.error("Registration error:", error.message);
