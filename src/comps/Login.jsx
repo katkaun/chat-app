@@ -5,7 +5,7 @@ import AuthContext from "../context/AuthProvider";
 const Login = () => {
   const { login } = useContext(AuthContext);
   const userRef = useRef();
-  const errRef = useRef();
+  // const errRef = useRef(); //might want later for display
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
