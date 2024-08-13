@@ -14,8 +14,8 @@ const Switch = () => {
       <Route element={<ProtectedRoute />}>
         <Route path="/profile" element={<Profile />} />
         <Route path="/chat" element={<Chat />} />
-        <Route path="/" element={<Navigate to="/chat" replace />} />
       </Route>
+      <Route path="/" element={<Navigate to="/login" replace />} /> {/* Change here */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
