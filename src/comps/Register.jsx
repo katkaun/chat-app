@@ -2,6 +2,9 @@ import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext, { fetchCsrfToken } from "../context/AuthProvider";
 
+const DEFAULT_AVATAR_URL =
+  "https://i.ibb.co/mRR9Jy1/no-profile-picture-15257.png";
+
 const Register = () => {
   const [userData, setUserData] = useState({
     username: "",
@@ -37,13 +40,12 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const username = userData.username.trim();
-    const randomAvatar = `https://api.multiavatar.com/${username}.svg`;
+    const finalAvatarUrl = userData.avatar || DEFAULT_AVATAR_URL;
 
     setIsLoading(true);
     const payload = {
       ...userData,
-      avatar: randomAvatar,
+      avatar: finalAvatarUrl,
       csrfToken,
     };
 
@@ -56,7 +58,7 @@ const Register = () => {
         username: "",
         password: "",
         email: "",
-        avatar: randomAvatar,
+        avatar: "",
       });
       setRegMessage("Account created! Redirecting to sign-in...");
       setTimeout(() => navigate("/login"), 3000);
@@ -65,7 +67,7 @@ const Register = () => {
       setRegMessage(error.message);
     }
   };
-  
+
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="max-w-[400px] p-6 bg-white shadow-md rounded-md flex flex-col justify-between">
@@ -138,6 +140,16 @@ const Register = () => {
             />
           </div>
           <div className="mb-4">
+            <input
+              className="w-full mt-3 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-200 focus:border-indigo-600"
+              type="text"
+              name="avatar"
+              value={userData.avatar}
+              onChange={handleChange}
+              placeholder="Avatar URL (optional)"
+            />
+          </div>
+          <div className="mb-4">
             <div className="flex items-center w-full mb-0">
               <input
                 type="checkbox"
@@ -160,7 +172,6 @@ const Register = () => {
               className="py-2 px-5 inline-block tracking-wide border align-middle duration-500 text-base text-center bg-indigo-600 hover:bg-indigo-800 border-indigo-600 hover:border-indigo-700 text-white rounded-md w-full"
               disabled={isLoading}
             >
-              {/* Disable button during loading */}
               {isLoading ? "Submitting..." : "Submit"}
             </button>
             <div className="text-center mt-2">

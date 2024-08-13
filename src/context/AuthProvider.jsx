@@ -15,7 +15,7 @@ export const fetchCsrfToken = async () => {
     });
 
     if (!response.ok) {
-      let errorMessage = "Failed to fetch CSRF token";
+      let errorMessage = `Failed to fetch CSRF token: ${response.status} ${response.statusText}`;
       try {
         const data = await response.json();
         errorMessage = data.error || errorMessage;
@@ -58,13 +58,13 @@ const registerUser = async (payload) => {
 
 const decodeJwtToken = (token) => {
   try {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const jsonPayload = decodeURIComponent(
       atob(base64)
-        .split('')
-        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join('')
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
     );
     const decoded = JSON.parse(jsonPayload);
     console.log("Decoded JWT token:", decoded); // Log the entire decoded token
@@ -99,7 +99,6 @@ const loginUser = async (payload) => {
   }
 };
 
-
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(() => {
     const token = localStorage.getItem("token");
@@ -115,29 +114,26 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      // Fetch CSRF token
       const csrfToken = await fetchCsrfToken();
-  
-      // Log in and get token
+
       const result = await loginUser({ username, password, csrfToken });
       const { token } = result;
-  
+
       // Decode JWT token to get user details
       const decodedToken = decodeJwtToken(token);
-  
+
       // Use decoded token data
       const userId = decodedToken.id;
       const userName = decodedToken.user;
       const avatar = decodedToken.avatar;
       const email = decodedToken.email;
-  
-      // Handle user info
+
       localStorage.setItem("token", token);
       localStorage.setItem("userId", userId);
-      localStorage.setItem("username", userName); 
+      localStorage.setItem("username", userName);
       localStorage.setItem("avatar", avatar);
       localStorage.setItem("email", email);
-  
+
       setAuth({
         token,
         userId,
@@ -145,7 +141,7 @@ export const AuthProvider = ({ children }) => {
         avatar,
         email,
       });
-  
+
       navigate("/chat");
     } catch (error) {
       console.error("Login error:", error.message);
@@ -155,13 +151,16 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (payload) => {
     try {
-      const result = await registerUser(payload);
+      const csrfToken = await fetchCsrfToken();
+      const result = await registerUser({ ...payload, csrfToken });
+
       localStorage.setItem("token", result.token);
       localStorage.setItem("userId", result.userId);
       localStorage.setItem("username", result.username);
       localStorage.setItem("avatar", result.avatar);
       localStorage.setItem("email", result.email);
 
+      // Update auth state
       setAuth(result);
 
       navigate("/chat");
