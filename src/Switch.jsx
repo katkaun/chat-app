@@ -1,10 +1,11 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import ProtectedRoute from "./utils/ProtectedRoute";
-import Login from "./comps/Login";
-import Register from "./comps/Register";
-import Chat from "./comps/Chat";
-import Profile from "./comps/Profile";
-import NotFound from "./comps/NotFound";
+import Profile from "./pages/Profile";
+import NotFound from "./pages/NotFound";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import Chat from "./pages/Chat";
+
 
 const Switch = () => {
   return (
@@ -15,7 +16,7 @@ const Switch = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/chat" element={<Chat />} />
       </Route>
-      <Route path="/" element={<Navigate to="/login" replace />} /> {/* Change here */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

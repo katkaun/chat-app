@@ -43,27 +43,40 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="max-w-[400px] p-6 bg-white shadow-md rounded-md flex flex-col justify-between">
-        <h5 className="my-6 text-xl font-semibold text-black">Sign In</h5>
+    <div className="flex items-center justify-center h-screen bg-base-200">
+      <div className="absolute top-20 left-0 right-0 text-center">
+        <h1 className="text-4xl font-bold text-primary">Welcome to Chatify!</h1>
+        <p className="text-lg mt-2">Sign in to connect with others</p>
+      </div>
+
+      <div
+        className="max-w-md p-7 bg-white shadow-lg rounded-lg flex flex-col space-y-4"
+        data-theme="cupcake"
+      >
+        <h5 className="text-2xl font-semibold text-primary text-center">
+          Sign In
+        </h5>
         {loginMessage && (
-          <p className="mb-4 text-indigo-600 text-center" aria-live="assertive">
+          <p
+            className="text-center text-base text-red-500"
+            aria-live="assertive"
+          >
             {loginMessage}
           </p>
         )}
-        <form onSubmit={handleLogin}>
-          <div className="mb-4">
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
             <label
               htmlFor="username"
-              className="text-base font-semibold text-black"
+              className="block text-base font-semibold text-gray-700 mb-1"
             >
               Username:
             </label>
             <input
-              className="w-full mt-3 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-200 focus:border-indigo-600"
+              className="input input-bordered w-full"
               type="text"
               id="username"
-              placeholder="username"
+              placeholder="Enter your username"
               ref={userRef}
               autoComplete="off"
               onChange={handleUsernameChange}
@@ -71,38 +84,35 @@ const Login = () => {
               required
             />
           </div>
-          <div className="mb-4">
+          <div>
             <label
-              htmlFor="username"
-              className="text-base font-semibold text-black"
+              htmlFor="password"
+              className="block text-base font-semibold text-gray-700 mb-1"
             >
               Password:
             </label>
             <input
-              className="w-full mt-3 py-2 px-3 h-10 bg-transparent rounded outline-none border border-gray-200 focus:border-indigo-600"
+              className="input input-bordered w-full"
               type="password"
               id="password"
-              placeholder="password"
+              placeholder="Enter your password"
               autoComplete="off"
               onChange={handlePasswordChange}
               value={password}
               required
             />
           </div>
-          <div className="mb-4">
-            <button
-              type="submit"
-              className="py-2 px-5 inline-block tracking-wide border align-middle duration-500 text-base text-center bg-indigo-600 hover:bg-indigo-800 border-indigo-600 hover:border-indigo-700 text-white rounded-md w-full"
-            >
+          <div>
+            <button type="submit" className="btn btn-secondary w-full">
               Sign In
             </button>
           </div>
         </form>
-        <div className="text-center mt-2">
-          <span className="text-slate-400 mr-2">Need an Account?</span>
+        <div className="text-center">
+          <span className="text-gray-500">Need an Account?</span>
           <a
             href="/register"
-            className="underline text-indigo-600 hover:text-indigo-800"
+            className="text-secondary hover:text-secondary-focus ml-1"
           >
             Sign Up
           </a>

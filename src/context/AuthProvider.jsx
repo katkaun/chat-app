@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext({});
 
-const BASE_URL = "https://chatify-api.up.railway.app";
+const BASE_URL = import.meta.env.VITE_RAILWAY_URL;
 
 export const fetchCsrfToken = async () => {
   try {
@@ -67,16 +67,20 @@ const decodeJwtToken = (token) => {
         .join("")
     );
     const decoded = JSON.parse(jsonPayload);
-    console.log("Decoded JWT token:", decoded); // Log the entire decoded token
+    const currentTime = Math.floor(Date.now() / 1000);
+    if (decoded.exp && decoded.exp < currentTime) {
+      console.warn("Token has expired");
+      return null; // Return null or handle expired token
+    }
+
     return decoded;
   } catch (error) {
     console.error("Error decoding JWT token:", error.message);
-    return {};
+    return null;
   }
 };
 
-const loginUser = async (payload) => {
-  console.log("Logging in with payload:", payload);
+const fetchJwtToken = async (payload) => {
 
   try {
     const response = await fetch(`${BASE_URL}/auth/token`, {
@@ -110,17 +114,20 @@ export const AuthProvider = ({ children }) => {
     return token ? { token, userId, username, avatar, email } : {};
   });
 
+
   const navigate = useNavigate();
+
 
   const login = async (username, password) => {
     try {
       const csrfToken = await fetchCsrfToken();
 
-      const result = await loginUser({ username, password, csrfToken });
+      const result = await fetchJwtToken({ username, password, csrfToken });
       const { token } = result;
 
       // Decode JWT token to get user details
       const decodedToken = decodeJwtToken(token);
+
 
       // Use decoded token data
       const userId = decodedToken.id;
@@ -160,7 +167,6 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("avatar", result.avatar);
       localStorage.setItem("email", result.email);
 
-      // Update auth state
       setAuth(result);
 
       navigate("/chat");
@@ -176,14 +182,62 @@ export const AuthProvider = ({ children }) => {
     navigate("/login");
   };
 
-  const updateAvatar = (newAvatar) => {
-    localStorage.setItem("avatar", newAvatar);
-    setAuth((prevAuth) => ({ ...prevAuth, avatar: newAvatar }));
+  // const updateAvatar = (newAvatar) => {
+  //   localStorage.setItem("avatar", newAvatar);
+  //   setAuth((prevAuth) => ({ ...prevAuth, avatar: newAvatar }));
+  // };
+  const updateUser = async (updatedUser) => {
+    const { token, userId } = auth; // Ensure userId is available from the context
+  
+    if (!userId) {
+      throw new Error("User ID is missing");
+    }
+  
+    try {
+      console.log("Updating user with payload:", { userId, updatedData: updatedUser }); // Add this line for debugging
+  
+      const response = await fetch(`${BASE_URL}/user`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId, updatedData: updatedUser }),
+      });
+  
+      if (!response.ok) {
+        const errorText = await response.text(); // Extract response text for debugging
+        console.error("Failed to update user:", errorText); // Log the error
+        throw new Error(`Failed to update user: ${errorText}`);
+      }
+  
+      const updatedData = await response.json();
+  
+      localStorage.setItem("avatar", updatedData.avatar);
+      localStorage.setItem("username", updatedData.username);
+      localStorage.setItem("email", updatedData.email);
+  
+      setAuth((prevAuth) => ({
+        ...prevAuth,
+        avatar: updatedData.avatar,
+        username: updatedData.username,
+        email: updatedData.email,
+      }));
+    } catch (error) {
+      console.error("Error updating user:", error.message);
+      throw error;
+    }
   };
 
   return (
     <AuthContext.Provider
-      value={{ auth, login, register, logout, updateAvatar }}
+      value={{
+        auth,
+        login,
+        register,
+        logout,
+        updateUser,
+      }}
     >
       {children}
     </AuthContext.Provider>

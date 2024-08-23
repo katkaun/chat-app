@@ -12,6 +12,6 @@ export default {
     require("@tailwindcss/forms")
   ],
   daisyui: {
-    themes: ["light", "dark", "cupcake"],
+    themes: ["light", "dark", "cupcake", "synthwave"],
   },
 }
