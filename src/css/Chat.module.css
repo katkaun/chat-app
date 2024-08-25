@@ -1,14 +1,14 @@
 .container {
-  display: flex;
-  height: 80vh;
-  width: 90%;
+  display: flex; /* Flexbox layout to place elements side by side */
+  height: 85vh;
+  width: 97%;
   overflow: hidden;
   border-radius: 10px;
   margin: 0 auto;
 }
 
 .chatPanel {
-  flex: 1;
+  flex: 1; 
   background-color: #3e3c61;
   color: white;
   padding: 10px;
@@ -16,11 +16,15 @@
 }
 
 .chatWindow {
-  flex: 3;
+  flex: 2; /* Take up more space on the right side */
   display: flex;
   flex-direction: column;
   background-color: #eaeaee;
   overflow: hidden;
+}
+
+.userChat {
+  margin: 40px auto;
 }
 
 .chatInfo {
@@ -62,29 +66,36 @@
 }
 
 
-/* .input {
-  background-color: #eaeaee;
+.messageInput {
   padding: 10px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-} */
-
-
-/* .userChat {
-  padding: 10px;
-  display:flex;
-  align-items: center;
-  gap: 10px;
-  color:white;
-  cursor: pointer;
+  background-color: #f0f0f0; /* Background color to match chat window */
+  border-top: 1px solid #ddd; /* Border to separate input from messages */
 }
 
-.user {
-  display: flex;
-gap: 10px;
+.input {
+  flex-grow: 1; /* Ensures input takes up available space */
 }
 
-.user:hover {
-  background-color: #2f2d52;
+.timestamp {
+  display: block;
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.5);
+  margin-right:15px;
+}
+
+/* .tooltrip {
+  position: absolute;
+    bottom: 100%;
+    right: 0;
+    margin-bottom: 5px;
+    background-color: black;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    display: none;
+}
+button:hover .tooltip {
+  display: block;
 } */

@@ -1,14 +1,49 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styles from "../../css/Chat.module.css";
+import AuthContext from "../../context/AuthProvider";
 
-const MessageInput = ({ onSendMessage }) => {
+const MessageInput = () => {
+  const { auth, fetchMessages, BASE_URL } = useContext(AuthContext);
   const [newMessage, setNewMessage] = useState("");
+
+  const handleSendMessage = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/messages`, {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+
+          Authorization: `Bearer ${auth.token}`,
+        },
+
+        body: JSON.stringify({
+          text: newMessage,
+          conversationId: "08af1102-9243-44c9-9020-9788cd84c7ff",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to send message: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      console.log(data);
+      setNewMessage("");
+      fetchMessages();
+    } catch (error) {
+      console.error("Error sending message:", error.message);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (newMessage.trim()) {
-      onSendMessage(newMessage);
-      setNewMessage("");
+
+    if (newMessage.trim() !== "") {
+      handleSendMessage(newMessage);
+    } else {
+      alert("enter valid msg");
     }
   };
 

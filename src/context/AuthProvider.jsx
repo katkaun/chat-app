@@ -81,7 +81,6 @@ const decodeJwtToken = (token) => {
 };
 
 const fetchJwtToken = async (payload) => {
-
   try {
     const response = await fetch(`${BASE_URL}/auth/token`, {
       method: "POST",
@@ -114,9 +113,7 @@ export const AuthProvider = ({ children }) => {
     return token ? { token, userId, username, avatar, email } : {};
   });
 
-
   const navigate = useNavigate();
-
 
   const login = async (username, password) => {
     try {
@@ -127,7 +124,6 @@ export const AuthProvider = ({ children }) => {
 
       // Decode JWT token to get user details
       const decodedToken = decodeJwtToken(token);
-
 
       // Use decoded token data
       const userId = decodedToken.id;
@@ -182,19 +178,47 @@ export const AuthProvider = ({ children }) => {
     navigate("/login");
   };
 
-  // const updateAvatar = (newAvatar) => {
-  //   localStorage.setItem("avatar", newAvatar);
-  //   setAuth((prevAuth) => ({ ...prevAuth, avatar: newAvatar }));
-  // };
+  const [messages, setMessages] = useState([]);
+
+  const fetchMessages = async () => {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/messages?conversationId=08af1102-9243-44c9-9020-9788cd84c7ff`,
+
+        {
+          method: "GET",
+
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch messages: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      setMessages(data);
+
+      console.log(data);
+    } catch (error) {
+      console.error("Error fetching messages:", error.message);
+    }
+  };
+
+  const updateMessages = () => fetchMessages(conversationId);
+
   const updateUser = async (updatedUser) => {
-    const { token, userId } = auth; // Ensure userId is available from the context
+    const { token, userId } = auth;
   
-    if (!userId) {
-      throw new Error("User ID is missing");
+    if (!token) {
+      throw new Error("token is missing");
     }
   
     try {
-      console.log("Updating user with payload:", { userId, updatedData: updatedUser }); // Add this line for debugging
+      const { username, email, avatar } = updatedUser;
+      const updatedData = { username, email, avatar };
   
       const response = await fetch(`${BASE_URL}/user`, {
         method: "PUT",
@@ -202,30 +226,28 @@ export const AuthProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId, updatedData: updatedUser }),
+        body: JSON.stringify({
+          userId: userId,
+          updatedData: updatedData
+        }),
       });
   
-      if (!response.ok) {
-        const errorText = await response.text(); // Extract response text for debugging
-        console.error("Failed to update user:", errorText); // Log the error
-        throw new Error(`Failed to update user: ${errorText}`);
+      const data = await response.json();
+      if (response.ok) {
+        // Uppdatera auth state och localStorage med de nya användardata
+        setAuth((prevAuth) => ({
+          ...prevAuth,
+          ...updatedData,
+        }));
+  
+        localStorage.setItem('username', username);
+        localStorage.setItem('email', email);
+        localStorage.setItem('avatar', avatar);
+      } else {
+        throw new Error(data.error || 'Failed to update user');
       }
-  
-      const updatedData = await response.json();
-  
-      localStorage.setItem("avatar", updatedData.avatar);
-      localStorage.setItem("username", updatedData.username);
-      localStorage.setItem("email", updatedData.email);
-  
-      setAuth((prevAuth) => ({
-        ...prevAuth,
-        avatar: updatedData.avatar,
-        username: updatedData.username,
-        email: updatedData.email,
-      }));
     } catch (error) {
-      console.error("Error updating user:", error.message);
-      throw error;
+      console.error("Error updating user:", error);
     }
   };
 
@@ -237,6 +259,10 @@ export const AuthProvider = ({ children }) => {
         register,
         logout,
         updateUser,
+        fetchMessages,
+        messages,
+        BASE_URL,
+        updateMessages,
       }}
     >
       {children}
