@@ -5,11 +5,11 @@ import AuthContext from "../context/AuthProvider";
 const Login = () => {
   const { login } = useContext(AuthContext);
   const userRef = useRef();
-  // const errRef = useRef(); //might want later for display
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginMessage, setLoginMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ const Login = () => {
   }, []);
 
   useEffect(() => {
-    setLoginMessage("");
+    setErrorMessage("");
   }, [username, password]);
 
   const handleUsernameChange = (e) => {
@@ -31,14 +31,19 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Attempting login with username:", username);
+    setIsLoading(true);
 
     try {
       await login(username, password);
+      setIsLoading(false);
       setLoginMessage(`Welcome ${username}! Redirecting to chat...`);
-      setTimeout(() => navigate("/chat"), 3000);
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate("/chat");
+      }, 3000);
     } catch (error) {
-      setLoginMessage(error.message);
+      setIsLoading(false);
+      setErrorMessage(error.message);
     }
   };
 
@@ -56,10 +61,20 @@ const Login = () => {
         <h5 className="text-2xl font-semibold text-primary text-center">
           Sign In
         </h5>
-        {loginMessage && (
+
+        {errorMessage && (
           <p
             className="text-center text-base text-red-500"
             aria-live="assertive"
+          >
+            {errorMessage}
+          </p>
+        )}
+
+        {loginMessage && (
+          <p
+            className="text-center text-base text-green-500"
+            aria-live="polite"
           >
             {loginMessage}
           </p>
@@ -103,8 +118,12 @@ const Login = () => {
             />
           </div>
           <div>
-            <button type="submit" className="btn btn-secondary w-full">
-              Sign In
+            <button
+              type="submit"
+              className="btn btn-secondary w-full"
+              disabled={isLoading}
+            >
+              {isLoading ? "Signing in..." : "Sign In"}
             </button>
           </div>
         </form>

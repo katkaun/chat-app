@@ -9,7 +9,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-100 navbar-fixed-top">
       <div className="flex-none">
         {/* This is the button that triggers the side nav */}
         <label htmlFor="my-drawer" className="btn btn-square btn-ghost">
@@ -28,7 +28,10 @@ const Navbar = () => {
           </svg>
         </label>
       </div>
-      <div className="flex-1 text-xl font-bold text-center text-primary">Chatify</div>      <div className="flex-none">
+      <div className="flex-1 text-xl font-bold text-center text-primary">
+        Chatify
+      </div>
+      <div className="flex-none">
         <button className="btn btn-ghost btn-circle">
           <div className="indicator">
             <svg

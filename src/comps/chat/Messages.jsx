@@ -34,32 +34,37 @@ const Messages = () => {
         <div key={message.id}>
           {message.userId === auth.userId ? (
             <div className="chat chat-end">
-              <div className="chat-bubble bg-purple-500 text-white relative">
+              <div className="chat-bubble bg-purple-500 text-white relative p-4">
                 {message.text}
-                <button
-                  className="absolute bottom-1 right-1 p-1"
-                  onClick={() => deleteMessage(message.id)}
-                >
-                  <DeleteIcon />
-                </button>
-                <span className={styles.timestamp}>
-                  {new Date(message.createdAt).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </span>
+                <div className="flex justify-between items-center mt-2 text-xs text-gray-300">
+                  <span className="flex-shrink-0">
+                    {new Date(message.createdAt).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                  <button
+                    className="ml-2 tooltip"
+                    data-tip="Delete"
+                    onClick={() => deleteMessage(message.id)}
+                  >
+                    <DeleteIcon />
+                  </button>
+                </div>
               </div>
             </div>
           ) : (
             <div className="chat chat-start">
-              <div className="chat-bubble bg-purple-200 text-gray-800 relative">
+              <div className="chat-bubble bg-purple-200 text-gray-800 relative p-4">
                 {message.text}
-                <span className={styles.timestamp}>
-                  {new Date(message.createdAt).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </span>
+                <div className="flex justify-between items-center mt-2 text-xs text-gray-500">
+                  <span className="flex-shrink-0">
+                    {new Date(message.createdAt).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                </div>
               </div>
             </div>
           )}
