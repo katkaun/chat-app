@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext, { fetchCsrfToken } from "../context/AuthProvider";
 
-const DEFAULT_AVATAR_URL = "https://i.ibb.co/mRR9Jy1/no-profile-picture-15257.png";
+const DEFAULT_AVATAR_URL = "https://i.ibb.co/ByjrwLW/no-profile-picture-15257.png";
 const AVATAR_OPTIONS = [
   { url: "https://i.ibb.co/gtgtGDS/deer.jpg", name: "Deer" },
   { url: "https://i.ibb.co/L8h7T8c/Owl.jpg", name: "Owl" },
@@ -26,8 +26,8 @@ const Register = () => {
   useEffect(() => {
     const getCsrfToken = async () => {
       try {
-        const token = await fetchCsrfToken();
-        setCsrfToken(token);
+        const csrfToken = await fetchCsrfToken();
+        setCsrfToken(csrfToken);
       } catch (error) {
         console.error("Failed to fetch CSRF token:", error);
       }
@@ -37,17 +37,10 @@ const Register = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUserData({
-      ...userData,
+    setUserData((prevState) => ({
+      ...prevState,
       [name]: value,
-    });
-  };
-
-  const handleAvatarSelect = (e) => {
-    setUserData({
-      ...userData,
-      avatar: e.target.value,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -160,7 +153,7 @@ const Register = () => {
               className="input input-bordered w-full mb-2"
               name="avatar"
               value={userData.avatar}
-              onChange={handleAvatarSelect}
+              onChange={handleChange}
             >
               <option value={DEFAULT_AVATAR_URL}>No picture</option>
               {AVATAR_OPTIONS.map((avatar, index) => (
@@ -169,18 +162,6 @@ const Register = () => {
                 </option>
               ))}
             </select>
-            <p className="mt- text-sm text-gray-500">
-          </p>
-            {/* <label htmlFor="custom-avatar-url" className="block text-base font-semibold text-gray-700 mb-1">Custom Avatar URL:</label>
-            <input
-              className="input input-bordered w-full"
-              type="text"
-              id="custom-avatar-url"
-              name="avatar"
-              placeholder="Paste your avatar URL here (optional)"
-              value={userData.avatar}
-              onChange={handleChange}
-            /> */}
           </div>
           <div className="flex items-center space-x-2">
             <input

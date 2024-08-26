@@ -35,7 +35,6 @@ export const fetchCsrfToken = async () => {
 };
 
 const registerUser = async (payload) => {
-  console.log("Registering user with payload:", payload);
 
   try {
     const response = await fetch(`${BASE_URL}/auth/register`, {
@@ -103,15 +102,15 @@ const fetchJwtToken = async (payload) => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState(() => {
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
-    const username = localStorage.getItem("username");
-    const avatar = localStorage.getItem("avatar");
-    const email = localStorage.getItem("email");
-
-    return token ? { token, userId, username, avatar, email } : {};
-  });
+    const [auth, setAuth] = useState(() => {
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
+      const username = localStorage.getItem("username");
+      const avatar = localStorage.getItem("avatar");
+      const email = localStorage.getItem("email");
+  
+      return token ? { token, userId, username, avatar, email } : {};
+    });
 
   const navigate = useNavigate();
 
@@ -154,23 +153,16 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (payload) => {
     try {
-      const csrfToken = await fetchCsrfToken();
-      const result = await registerUser({ ...payload, csrfToken });
-
-      localStorage.setItem("token", result.token);
-      localStorage.setItem("userId", result.userId);
-      localStorage.setItem("username", result.username);
-      localStorage.setItem("avatar", result.avatar);
-      localStorage.setItem("email", result.email);
-
-      setAuth(result);
-
-      navigate("/chat");
+      const csrfToken = await fetchCsrfToken(); 
+      await registerUser({ ...payload, csrfToken }); // Register user
+  
+      navigate("/login");
     } catch (error) {
       console.error("Registration error:", error.message);
       throw error;
     }
   };
+  
 
   const logout = () => {
     localStorage.clear();
@@ -234,7 +226,6 @@ export const AuthProvider = ({ children }) => {
   
       const data = await response.json();
       if (response.ok) {
-        // Uppdatera auth state och localStorage med de nya användardata
         setAuth((prevAuth) => ({
           ...prevAuth,
           ...updatedData,
@@ -251,6 +242,39 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const removeAccount = async () => {
+    const confirmed = window.confirm("Are you sure you want to delete your account? This action is irreversible, and all your data will be permanently removed. Click 'OK' to confirm.");
+  
+    if (!confirmed) {
+      return; 
+    }
+  
+    const { token, userId } = auth;
+  
+    try {
+      const response = await fetch(`${BASE_URL}/users/${userId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to delete account");
+      }
+  
+      localStorage.clear();
+      setAuth({});
+  
+      navigate("/login");
+  
+      console.log("Account deleted");
+    } catch (error) {
+      console.error("Error deleting account:", error.message);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -263,6 +287,7 @@ export const AuthProvider = ({ children }) => {
         messages,
         BASE_URL,
         updateMessages,
+        removeAccount,
       }}
     >
       {children}

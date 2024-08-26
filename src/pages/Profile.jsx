@@ -4,6 +4,7 @@ import PenIcon from "../comps/PenIcon";
 import Modal from "../comps/Modal";
 import ImgUploader from "../comps/ImgUploader";
 import ProfileForm from "../comps/ProfileForm";
+import DeleteAccount from "../comps/DeleteAccount";
 
 const Profile = () => {
   const { auth, updateUser } = useContext(AuthContext);
@@ -46,6 +47,7 @@ const Profile = () => {
           <ProfileForm onClose={() => setModalOpen(false)} />
         </Modal>
       )}
+      <DeleteAccount />
     </div>
   );
 };

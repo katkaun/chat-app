@@ -3,7 +3,6 @@ import Switch from "./Switch";
 import AuthContext, { AuthProvider } from "./context/AuthProvider";
 import SideNav from "./comps/SideNav";
 import Navbar from "./comps/Navbar";
-
 import { useContext, useState } from "react";
 import Layout from "./comps/Layout";
 
@@ -24,5 +23,10 @@ function App() {
     </AuthProvider>
   );
 }
+
+// function NavbarAuth() {
+//   const {auth} = useContext(AuthContext);
+//   return auth?.token ? <Navbar />: null
+// }
 
 export default App;

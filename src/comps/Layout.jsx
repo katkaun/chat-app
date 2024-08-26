@@ -1,9 +1,17 @@
 import React from "react";
 
-const Layout = ({ children, theme = "cupcake" }) => {
+const Layout = ({ children }) => {
   return (
-    <div className={`relative min-h-screen`} data-theme={theme}>
-      {children}
+    <div className="layout">
+      <header className="header">
+        {/* Navbar will be inserted here by NavbarAuth */}
+      </header>
+      <main className="main-content">
+        {children}
+      </main>
+      <footer className="footer">
+        {/* Any footer content */}
+      </footer>
     </div>
   );
 };

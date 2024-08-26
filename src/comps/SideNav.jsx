@@ -15,7 +15,7 @@ const SideNav = () => {
   };
 
   return (
-    <div className="drawer">
+    <div className="drawer relative z-50">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
         <div></div>
