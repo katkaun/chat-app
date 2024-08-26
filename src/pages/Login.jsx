@@ -46,11 +46,11 @@ const Login = () => {
     <div className="flex items-center justify-center h-screen bg-base-200">
       <div className="absolute top-20 left-0 right-0 text-center">
         <h1 className="text-4xl font-bold text-primary">Welcome to Chatify!</h1>
-        <p className="text-lg mt-2">Sign in to connect with others</p>
+        <p className="text-lg">Sign in to connect with others</p>
       </div>
 
       <div
-        className="max-w-md p-7 bg-white shadow-lg rounded-lg flex flex-col space-y-4"
+        className="max-w-md p-6 bg-white shadow-lg rounded-lg flex flex-col space-y-4 mt-6"
         data-theme="cupcake"
       >
         <h5 className="text-2xl font-semibold text-primary text-center">
