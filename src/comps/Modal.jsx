@@ -1,4 +1,4 @@
-import ImgUploader from "./ImgUploader";
+import ProfileForm from "./ProfileForm";
 
 const Modal = ({ closeModal }) => {
   return (
@@ -33,7 +33,7 @@ const Modal = ({ closeModal }) => {
                 </svg>
               </button>
 
-              <ImgUploader />
+              <ProfileForm onClose={closeModal} />
             </div>
           </div>
         </div>

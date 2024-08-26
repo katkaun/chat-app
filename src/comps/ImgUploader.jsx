@@ -1,23 +1,13 @@
-import { useContext, useState, useEffect } from "react";
-import AuthContext from "../context/AuthProvider";
+import { useState } from "react";
 
-const ImgUploader = ({ onUpdateUser }) => {
-  const { auth, updateUser } = useContext(AuthContext);
-  const [tempFile, setTempFile] = useState(null);
-  const [tempUsername, setTempUsername] = useState("");
-  const [tempEmail, setTempEmail] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+const ImgUploader = ({ onUploadSuccess }) => {
+  const [newFile, setNewFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
 
-  useEffect(() => {
-    // Initialize the temporary state with current user data
-    setTempUsername(auth.username || "");
-    setTempEmail(auth.email || "");
-  }, [auth]);
 
   const uploadImageToImgBB = async (file) => {
     const formData = new FormData();
-    formData.append("key", "f3ca3b4af8d47af409b51e5b61224665"); 
+    formData.append("key", "f3ca3b4af8d47af409b51e5b61224665");
     formData.append("image", file);
 
     const apiUrl = "https://api.imgbb.com/1/upload";
@@ -41,82 +31,56 @@ const ImgUploader = ({ onUpdateUser }) => {
       throw new Error("Upload failed: " + error.message);
     }
   };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-
-    try {
-      const updatedUser = {
-        username: tempUsername,
-        email: tempEmail,
-      };
-
-      if (tempFile) {
-        const uploadedImageUrl = await uploadImageToImgBB(tempFile);
-        updatedUser.avatar = uploadedImageUrl;
-      }
-
-      await updateUser(updatedUser);
-      setError("");
-    } catch (error) {
-      setError("Failed to update user details: " + error.message);
+  
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setNewFile(file);
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewUrl(objectUrl);
     }
+  };
 
-    setLoading(false);
+  const handleUpload = async () => {
+    if (newFile) {
+      try {
+        const imageUrl = await uploadImageToImgBB(newFile);
+        if (onUploadSuccess) {
+          onUploadSuccess(imageUrl);
+        }
+      } catch (error) {
+        console.error("Failed to handle upload:", error);
+      }
+    } else {
+      console.error("No file selected for upload.");
+    }
   };
 
   return (
-    <div className="p-4 border rounded-md shadow-md">
-      <form onSubmit={handleSubmit}>
-        <label className="block mb-3">
-          <span className="sr-only">Choose profile picture</span>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setTempFile(e.target.files?.[0] || null)}
-            className="block mb-3 text-sm text-slate-500 file:mr-4 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-xs file:bg-gray-700 file:text-sky-300 hover:file:bg-gray-600"
-          />
-        </label>
-        <div className="mb-3">
-  <label
-    htmlFor="username"
-    className="block text-sm font-medium text-gray-700"
-  >
-    Username
-  </label>
-  <input
-    id="username"
-    type="text"
-    value={tempUsername}
-    onChange={(e) => setTempUsername(e.target.value)}
-    className="block w-full mt-1 text-sm border-gray-300 rounded-md shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50"
-  />
-</div>
-<div className="mb-3">
-  <label
-    htmlFor="email"
-    className="block text-sm font-medium text-gray-700"
-  >
-    Email
-  </label>
-  <input
-    id="email"
-    type="email"
-    value={tempEmail}
-    onChange={(e) => setTempEmail(e.target.value)}
-    className="block w-full mt-1 text-sm border-gray-300 rounded-md shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50"
-  />
-</div>
-        {error && <p className="text-red-400 text-xs">{error}</p>}
-        <button
-          type="submit"
-          className="text-white font-mono text-xs py-2 px-4 rounded-2xl bg-sky-500 hover:bg-sky-600"
-          disabled={loading}
-        >
-          {loading ? "Updating..." : "Update"}
-        </button>
-      </form>
+    <div>
+      <label className="block mb-3">
+        <span className="sr-only">Choose profile picture</span>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="block mb-3 text-sm text-slate-500 file:mr-4 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-xs file:bg-gray-700 file:text-sky-300 hover:file:bg-gray-600"
+        />
+      </label>
+
+      {previewUrl && (
+        <div className="mb-4">
+          <img src={previewUrl} alt="Preview" className="w-32 h-32 object-cover rounded-full border border-gray-300" />
+        </div>
+      )}
+
+      <button
+        type="button"
+        onClick={handleUpload}
+        className="text-white font-mono text-xs py-2 px-4 rounded-2xl bg-sky-500 hover:bg-sky-600"
+      >
+        Upload
+      </button>
     </div>
   );
 };
