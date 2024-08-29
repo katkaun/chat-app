@@ -96,7 +96,7 @@ const ProfileForm = ({ onClose }) => {
         {error && <p className="text-red-400 text-xs mb-4">{error}</p>}
         <button
           type="submit"
-          className="text-white font-mono text-xs py-2 px-4 rounded-2xl bg-sky-500 hover:bg-sky-600"
+          className="text-white text-xs py-2 px-4 rounded-2xl bg-sky-500 hover:bg-sky-600"
           disabled={loading}
         >
           {loading ? "Updating..." : "Update"}

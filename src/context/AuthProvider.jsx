@@ -296,3 +296,29 @@ export const AuthProvider = ({ children }) => {
 };
 
 export default AuthContext;
+
+
+
+// const fetchUserData = async (userId, token) => {
+//   try {
+//     const response = await fetch(`${BASE_URL}/users/${userId}`,{
+//       method: "GET",
+//       headers: {
+//         Authorization: `BEarer ${auth.token}`,
+//       },
+//     });
+
+
+//     if (!response.ok) {
+//       throw new Error(`Failed to fetch user data: ${response.statusText}`);
+//     }
+
+//     const data = await response.json();
+//     const user = data[0]; // Assuming the data is an array and you want the first item
+
+//     return user;
+//   } catch (error) {
+//     console.error("Error fetching user data:", error.message);
+//     throw error;
+//   }
+// };

@@ -77,7 +77,7 @@ const ImgUploader = ({ onUploadSuccess }) => {
       <button
         type="button"
         onClick={handleUpload}
-        className="text-white font-mono text-xs py-2 px-4 rounded-2xl bg-sky-500 hover:bg-sky-600"
+        className="text-white text-xs py-2 px-4 rounded-2xl bg-sky-500 hover:bg-sky-600"
       >
         Upload
       </button>
