@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import AuthContext from "../../context/AuthProvider";
 import styles from "../../css/Chat.module.css";
 import DeleteIcon from "../DeleteIcon";
@@ -27,6 +27,10 @@ const Messages = () => {
     }
   };
   console.log(messages);
+
+  useEffect(() => {
+    fetchMessages();
+  }, [auth.token]);
 
   return (
     <div>

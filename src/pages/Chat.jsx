@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import styles from "../css/Chat.module.css";
 import AuthContext from "../context/AuthProvider";
 import Messages from "../comps/chat/Messages";
@@ -6,15 +6,17 @@ import MessageInput from "../comps/chat/MessageInput";
 import ChatPanel from "../comps/chat/ChatPanel";
 
 const Chat = () => {
-  const { auth, fetchMessages } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);  
+  const conversationId = "08af1102-9243-44c9-9020-9788cd84c7ff";  // Placeholder, should be dynamic
 
-  useEffect(() => {
-    fetchMessages();
-  }, [auth.token]);
+  if (!auth || !auth.token) {
+    // Handle the case where auth is not available (e.g., redirect to login)
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className={styles.container}>
-        <ChatPanel/>
+      <ChatPanel />
       <div className={styles.chatWindow}>
         <div className={styles.chatInfo}>
           <span className="font-semibold">{auth.username}</span>
@@ -26,10 +28,10 @@ const Chat = () => {
         </div>
 
         <div className={styles.messages}>
-          <Messages />
+          <Messages conversationId={conversationId} />
         </div>
 
-        <MessageInput />
+        <MessageInput conversationId={conversationId} />
       </div>
     </div>
   );

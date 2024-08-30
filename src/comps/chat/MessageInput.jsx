@@ -6,6 +6,7 @@ const MessageInput = () => {
   const { auth, fetchMessages, BASE_URL } = useContext(AuthContext);
   const [newMessage, setNewMessage] = useState("");
 
+    //Funktion för skicka
   const handleSendMessage = async () => {
     try {
       const response = await fetch(`${BASE_URL}/messages`, {
@@ -30,13 +31,14 @@ const MessageInput = () => {
       const data = await response.json();
 
       console.log(data);
-      setNewMessage("");
-      fetchMessages();
+      setNewMessage(""); //Töm input
+      fetchMessages(); //Hämta meddelanden på nytt efter skickat
     } catch (error) {
       console.error("Error sending message:", error.message);
     }
   };
 
+  //Hantera formulärsändning
   const handleSubmit = (e) => {
     e.preventDefault();
 
