@@ -1,10 +1,9 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import * as Sentry from "@sentry/react";
 
 const AuthContext = createContext({});
 
-const BASE_URL = "https://chatify-api.up.railway.app";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const fetchCsrfToken = async () => {
   try {
@@ -88,6 +87,10 @@ const decodeJwtToken = (token) => {
         .join("")
     );
     const decoded = JSON.parse(jsonPayload);
+
+    console.log("Decoded JWT token:", decoded);
+
+
     const currentTime = Math.floor(Date.now() / 1000);
     if (decoded.exp && decoded.exp < currentTime) {
       console.warn("Token has expired");
@@ -108,8 +111,9 @@ export const AuthProvider = ({ children }) => {
     const username = localStorage.getItem("username");
     const avatar = localStorage.getItem("avatar");
     const email = localStorage.getItem("email");
+    const invite = localStorage.getItem("invite");
 
-    return token ? { token, userId, username, avatar, email } : {};
+    return token ? { token, userId, username, avatar, email, invite } : {};
   });
 
   const navigate = useNavigate();
@@ -129,12 +133,20 @@ export const AuthProvider = ({ children }) => {
       const userName = decodedToken.user;
       const avatar = decodedToken.avatar;
       const email = decodedToken.email;
+      const invite = decodedToken.invite;
+
+      console.log("User ID:", userId);
+      console.log("Username:", userName);
+      console.log("Avatar:", avatar);
+      console.log("Email:", email);
+      console.log("Invite:", invite);
 
       localStorage.setItem("token", token);
       localStorage.setItem("userId", userId);
       localStorage.setItem("username", userName);
       localStorage.setItem("avatar", avatar);
       localStorage.setItem("email", email);
+      localStorage.setItem("invite", invite);
 
       setAuth({
         token,
@@ -142,6 +154,7 @@ export const AuthProvider = ({ children }) => {
         username: userName,
         avatar,
         email,
+        invite,
       });
 
       navigate("/chat");
@@ -165,7 +178,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.clear();
+    localStorage.removeItem("token");
     setAuth({});
     navigate("/login");
   };
@@ -267,9 +280,7 @@ export const AuthProvider = ({ children }) => {
 
       localStorage.clear();
       setAuth({});
-
       navigate("/login");
-
       console.log("Account deleted");
     } catch (error) {
       console.error("Error deleting account:", error.message);

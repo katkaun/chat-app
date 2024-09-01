@@ -33,7 +33,7 @@ const ProfileForm = ({ onClose }) => {
       await updateUser(updatedUser);
       setError("");
       setShowToast(true); // Show the toast message
-      setTimeout(() => onClose(), 1500);
+      setTimeout(() => onClose(), 2000);
     } catch (error) {
       setError("Failed to update user details: " + error.message);
     }

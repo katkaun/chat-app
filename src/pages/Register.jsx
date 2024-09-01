@@ -26,14 +26,17 @@ const Register = () => {
   useEffect(() => {
     const getCsrfToken = async () => {
       try {
-        const csrfToken = await fetchCsrfToken();
-        setCsrfToken(csrfToken);
+        const token = await fetchCsrfToken();
+        setCsrfToken(token);
       } catch (error) {
         console.error("Failed to fetch CSRF token:", error);
       }
     };
-    getCsrfToken();
-  }, []);
+  
+    if (!csrfToken) { // Only fetch if token is not already present
+      getCsrfToken();
+    }
+  }, [csrfToken]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
