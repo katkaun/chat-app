@@ -1,8 +1,10 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthContext, { fetchCsrfToken } from "../context/AuthProvider";
+import AuthContext from "../context/AuthProvider"; 
+import { fetchCsrfToken } from "../utils/authUtils";
 
-const DEFAULT_AVATAR_URL = "https://i.ibb.co/ByjrwLW/no-profile-picture-15257.png";
+const DEFAULT_AVATAR_URL =
+  "https://i.ibb.co/ByjrwLW/no-profile-picture-15257.png";
 const AVATAR_OPTIONS = [
   { url: "https://i.ibb.co/gtgtGDS/deer.jpg", name: "Deer" },
   { url: "https://i.ibb.co/L8h7T8c/Owl.jpg", name: "Owl" },
@@ -32,8 +34,9 @@ const Register = () => {
         console.error("Failed to fetch CSRF token:", error);
       }
     };
-  
-    if (!csrfToken) { // Only fetch if token is not already present
+
+    if (!csrfToken) {
+      // Only fetch if token is not already present
       getCsrfToken();
     }
   }, [csrfToken]);
@@ -151,7 +154,9 @@ const Register = () => {
             />
           </div>
           <div>
-            <label className="block text-base font-semibold text-gray-700 mb-1">Choose Avatar:</label>
+            <label className="block text-base font-semibold text-gray-700 mb-1">
+              Choose Avatar:
+            </label>
             <select
               className="input input-bordered w-full mb-2"
               name="avatar"

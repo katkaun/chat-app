@@ -1,13 +1,16 @@
 import React, { useContext, useState } from "react";
 import styles from "../../css/Chat.module.css";
 import AuthContext from "../../context/AuthProvider";
+import { useChat } from "../../context/ChatContext";
 
 const MessageInput = () => {
-  const { auth, fetchMessages, BASE_URL } = useContext(AuthContext);
+  const { auth, BASE_URL } = useContext(AuthContext);
+  const {selectedConversation, fetchMessages} = useChat();
   const [newMessage, setNewMessage] = useState("");
 
-    //Funktion för skicka
   const handleSendMessage = async () => {
+    if(!newMessage.trim()) return;
+
     try {
       const response = await fetch(`${BASE_URL}/messages`, {
         method: "POST",
@@ -20,7 +23,7 @@ const MessageInput = () => {
 
         body: JSON.stringify({
           text: newMessage,
-          conversationId: "08af1102-9243-44c9-9020-9788cd84c7ff",
+          conversationId: selectedConversation,
         }),
       });
 
@@ -31,22 +34,16 @@ const MessageInput = () => {
       const data = await response.json();
 
       console.log(data);
-      setNewMessage(""); //Töm input
-      fetchMessages(); //Hämta meddelanden på nytt efter skickat
+      setNewMessage("");
+      fetchMessages(selectedConversation);
     } catch (error) {
       console.error("Error sending message:", error.message);
     }
   };
 
-  //Hantera formulärsändning
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (newMessage.trim() !== "") {
-      handleSendMessage(newMessage);
-    } else {
-      alert("enter valid msg");
-    }
+    handleSendMessage();
   };
 
   return (
