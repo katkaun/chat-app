@@ -25,7 +25,47 @@
 }
 
 .userChat {
-  margin: 40px auto;
+  padding: 10px;
+  border-bottom: 1px solid gray;
+}
+
+.conversation {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* Adjust gap between avatar and text */
+  padding: 10px; /* Adjust padding inside each conversation item */
+  margin: 10px; /* Space between conversation items */
+  border-radius: 8px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+.conversation.active {
+  background-color: #4c4a7a; /* Background color when active */
+}
+
+.conversation:hover {
+  background-color: #4c4a7a; /* Background color on hover */
+}
+
+.text-white {
+  color: #ffffff; /* White text color */
+}
+
+.font-semibold {
+  font-weight: 600; /* Semibold text */
+}
+
+.text-xs {
+  font-size: 0.75rem; /* Extra small text size */
+}
+
+.text-gray-200 {
+  color: #e2e8f0; /* Light gray text color */
+}
+
+.search {
+  background: black;
 }
 
 .chatInfo {
