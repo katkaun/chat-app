@@ -4,9 +4,10 @@ import AuthContext, { AuthProvider } from "./context/AuthProvider";
 import SideNav from "./comps/SideNav";
 import Navbar from "./comps/Navbar";
 import { useContext, useState } from "react";
+import Layout from "./comps/Layout";
 
 function App() {
-  const { auth } = useContext(AuthContext);
+  // const { auth } = useContext(AuthContext);
   // const [theme, setTheme] = useState("cupcake");
   // const toggleTheme = () => {
   //   setTheme((prevTheme) => (prevTheme === "cupcake" ? "synthwave" : "cupcake"));
@@ -14,11 +15,11 @@ function App() {
 
   return (
     <AuthProvider>
-      {/* <Layout> */}
+      <Layout>
       <Navbar />
       <SideNav />
       <Switch />
-      {/* </Layout> */}
+      </Layout>
     </AuthProvider>
   );
 }

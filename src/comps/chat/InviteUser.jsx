@@ -68,8 +68,8 @@ const InviteUser = () => {
         <input
           name="search"
           type="text"
-          className="mb-4 text-black flex-grow"
-          placeholder="Search users..."
+          className="input input-bordered max-w-xs text-gray-600"
+          placeholder="Search by username.."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />

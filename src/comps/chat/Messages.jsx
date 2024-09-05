@@ -5,7 +5,8 @@ import DeleteIcon from "../DeleteIcon";
 import { useChat } from "../../context/ChatContext";
 
 const Messages = () => {
-  const { selectedConversation, messages, setMessages, updateMessages } = useChat();
+  const { selectedConversation, messages, setMessages, updateMessages } =
+    useChat();
   const { auth, BASE_URL } = useContext(AuthContext);
 
   useEffect(() => {
@@ -38,19 +39,18 @@ const Messages = () => {
     }
   };
 
-
-
   return (
-    <div>
+    <div className="flex-1 overflow-y-auto p-4">
       {messages.length > 0 ? (
         messages.map((message) => {
-          console.log('Rendering message:', message); 
+          console.log("Message User ID:", message.userId);
+          console.log("Authenticated User ID:", auth.userId);
 
           return (
             <div key={message.id}>
               {message.userId === auth.userId ? (
                 <div className="chat chat-end">
-                  <div className="chat-bubble bg-purple-500 text-white relative p-4">
+                  <div className="chat-bubble">
                     {message.text}
                     <div className="flex justify-between items-center mt-2 text-xs text-gray-300">
                       <span className="flex-shrink-0">
@@ -71,7 +71,7 @@ const Messages = () => {
                 </div>
               ) : (
                 <div className="chat chat-start">
-                  <div className="chat-bubble bg-purple-200 text-gray-800 relative p-4">
+                  <div className="chat-bubble bg-purple-200 text-gray-800 p-4">
                     {message.text}
                     <div className="flex justify-between items-center mt-2 text-xs text-gray-500">
                       <span className="flex-shrink-0">

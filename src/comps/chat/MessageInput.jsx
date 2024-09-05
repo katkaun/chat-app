@@ -47,16 +47,21 @@ const MessageInput = () => {
   };
 
   return (
-    <div className={styles.messageInput}>
-      <form onSubmit={handleSubmit} className="flex items-center">
+<div className="bg-gray-200 border-t border-gray-300 p-2">
+      <form onSubmit={handleSubmit} className="flex">
         <input
           type="text"
           placeholder="Type a message..."
-          className={`input input-bordered flex-grow ${styles.input}`}
+          className="input input-bordered flex-grow"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
         />
-        <button className="btn btn-primary ml-2">Send</button>
+        <button
+          type="submit"
+          className="btn btn-primary ml-2"
+        >
+          Send
+        </button>
       </form>
     </div>
   );

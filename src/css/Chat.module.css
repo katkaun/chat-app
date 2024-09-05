@@ -1,5 +1,5 @@
 .container {
-  display: flex; /* Flexbox layout to place elements side by side */
+  display: flex; 
   height: 85vh;
   width: 97%;
   overflow: hidden;
@@ -7,16 +7,12 @@
   margin: 0 auto;
 }
 
-.chatPanel {
-  flex: 1;
-  background-color: #3e3c61;
-  color: white;
-  padding: 10px;
-  overflow-y: auto;
+.customBackground {
+  background-color: #3e3c61; 
 }
 
 .chatWindow {
-  flex: 2; /* Take up more space on the right side */
+  flex: 2;
   display: flex;
   flex-direction: column;
   background-color: #eaeaee;
@@ -24,48 +20,22 @@
   scroll-behavior: smooth;
 }
 
-.userChat {
-  padding: 10px;
-  border-bottom: 1px solid gray;
-}
-
 .conversation {
   display: flex;
   align-items: center;
-  gap: 16px; /* Adjust gap between avatar and text */
-  padding: 10px; /* Adjust padding inside each conversation item */
-  margin: 10px; /* Space between conversation items */
-  border-radius: 8px; /* Rounded corners */
-  cursor: pointer; /* Pointer cursor on hover */
-  transition: background-color 0.3s ease; /* Smooth transition for background color */
+  padding: 10px; 
+  margin: 10px; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  transition: background-color 0.3s ease; 
 }
 
 .conversation.active {
-  background-color: #4c4a7a; /* Background color when active */
+  background-color: #4c4a7a; 
 }
 
 .conversation:hover {
-  background-color: #4c4a7a; /* Background color on hover */
-}
-
-.text-white {
-  color: #ffffff; /* White text color */
-}
-
-.font-semibold {
-  font-weight: 600; /* Semibold text */
-}
-
-.text-xs {
-  font-size: 0.75rem; /* Extra small text size */
-}
-
-.text-gray-200 {
-  color: #e2e8f0; /* Light gray text color */
-}
-
-.search {
-  background: black;
+  background-color: #4c4a7a; 
 }
 
 .chatInfo {
@@ -76,11 +46,6 @@
   justify-content: space-between;
   padding: 10px;
   color: white;
-}
-
-.chatIcons {
-  display: flex;
-  align-items: center;
 }
 
 .avatarContainer {
@@ -100,42 +65,3 @@
   object-fit: cover;
 }
 
-.messages {
-  padding: 10px;
-  flex: 1;
-  overflow-y: auto;
-}
-
-.messageInput {
-  padding: 10px;
-  background-color: #f0f0f0; /* Background color to match chat window */
-  border-top: 1px solid #ddd; /* Border to separate input from messages */
-}
-
-.input {
-  flex-grow: 1; /* Ensures input takes up available space */
-}
-
-.timestamp {
-  display: block;
-  font-size: 0.75rem;
-  color: rgba(0, 0, 0, 0.5);
-  margin-right: 15px;
-}
-
-/* .tooltrip {
-  position: absolute;
-    bottom: 100%;
-    right: 0;
-    margin-bottom: 5px;
-    background-color: black;
-    color: white;
-    padding: 5px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    white-space: nowrap;
-    display: none;
-}
-button:hover .tooltip {
-  display: block;
-} */

@@ -1,6 +1,5 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import AuthContext from "./AuthProvider";
-import { generateGUID } from "../utils/generateGUID";
 import { decodeJwtToken } from "../utils/authUtils";
 
 const ChatContext = createContext();
@@ -13,17 +12,15 @@ export const ChatProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [receivedInvites, setReceivedInvites] = useState([]);
-  const [combinedConversations, setCombinedConversations] = useState([]);
 
-  //Inbjudningar från decoded token
   useEffect(() => {
     if (auth.token) {
       const decodedToken = decodeJwtToken(auth.token);
       if (decodedToken?.invite) {
-        console.log('Invites:', decodedToken.invite);
-        setReceivedInvites(decodedToken.invite);
+        console.log("Received invites:", decodedToken.invite);
+        setReceivedInvites(JSON.parse(decodedToken.invite));
       } else {
-        console.warn('No invites found in the token');
+        console.warn("No invites found in the token");
         setReceivedInvites([]);
       }
     }
@@ -59,8 +56,6 @@ export const ChatProvider = ({ children }) => {
     }
   }, [auth.token]);
 
-
-
   const fetchMessages = async (conversationId) => {
     if (!conversationId) return;
 
@@ -81,8 +76,6 @@ export const ChatProvider = ({ children }) => {
 
       const data = await response.json();
       setMessages(data);
-
-      console.log("Fetched messages:", data);
     } catch (error) {
       console.error("Error fetching messages:", error.message);
     }
@@ -155,10 +148,9 @@ export const ChatProvider = ({ children }) => {
         fetchMessages,
         fetchMessagesWithUserId,
         users,
-        combinedConversations,
-        receivedInvites,
         conversations,
         setMessages,
+        receivedInvites,
       }}
     >
       {children}

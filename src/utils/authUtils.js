@@ -63,7 +63,12 @@ export const fetchJwtToken = async (payload) => {
         }
     
         const result = await response.json();
-        console.log("Full login response:", result); // Log the entire response object
+        console.log("Full login response:", result);
+         
+        if (result.token) {
+          localStorage.setItem("jwtToken", result.token);
+        }
+
         return result;
       } catch (error) {
         console.error("Error logging in user:", error.message);

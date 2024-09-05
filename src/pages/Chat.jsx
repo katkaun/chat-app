@@ -23,7 +23,7 @@ const Chat = () => {
               </div>
             </div>
           </div>
-          <div className={styles.messages}>
+          <div className="flex-1 flex flex-col">
             <Messages />
           </div>
           <MessageInput />
@@ -34,3 +34,4 @@ const Chat = () => {
 };
 
 export default Chat;
+
