@@ -5,7 +5,7 @@ import DeleteIcon from "../DeleteIcon";
 import { useChat } from "../../context/ChatContext";
 
 const Messages = () => {
-  const { selectedConversation, messages, setMessages, updateMessages } =
+  const { selectedConversation, messages, updateMessages, deleteMessage } =
     useChat();
   const { auth, BASE_URL } = useContext(AuthContext);
 
@@ -15,29 +15,6 @@ const Messages = () => {
     }
   }, [selectedConversation, auth.token]);
 
-  const deleteMessage = async (messageId) => {
-    try {
-      const response = await fetch(`${BASE_URL}/messages/${messageId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to delete message");
-      }
-
-      console.log(`Message with ID ${messageId} deleted successfully`);
-
-      setMessages((prevMessages) =>
-        prevMessages.filter((message) => message.id !== messageId)
-      );
-    } catch (error) {
-      console.error("Error deleting message:", error.message);
-    }
-  };
 
   return (
     <div className="flex-1 overflow-y-auto p-4">
@@ -48,7 +25,7 @@ const Messages = () => {
 
           return (
             <div key={message.id}>
-              {message.userId === auth.userId ? (
+              {message.userId == auth.userId ? (
                 <div className="chat chat-end">
                   <div className="chat-bubble">
                     {message.text}

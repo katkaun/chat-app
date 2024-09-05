@@ -109,6 +109,30 @@ export const ChatProvider = ({ children }) => {
     }
   };
 
+  const deleteMessage = async (messageId) => {
+    try {
+      const response = await fetch(`${BASE_URL}/messages/${messageId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete message");
+      }
+
+      console.log(`Message with ID ${messageId} deleted successfully`);
+
+      setMessages((prevMessages) =>
+        prevMessages.filter((message) => message.id !== messageId)
+      );
+    } catch (error) {
+      console.error("Error deleting message:", error.message);
+    }
+  };
+
   const fetchAllUsers = async () => {
     try {
       const response = await fetch(`${BASE_URL}/users`, {
@@ -151,6 +175,7 @@ export const ChatProvider = ({ children }) => {
         conversations,
         setMessages,
         receivedInvites,
+        deleteMessage,
       }}
     >
       {children}

@@ -10,8 +10,8 @@ const ChatPanel = () => {
       {" "}
       <h3 className="text-lg font-semibold mb-6">Conversations</h3>
       <InviteUser />
-      <div className="border-b border-gray-600 mb-3">
         <Conversations />
+        <div className="border-b border-gray-600 mb-3">
       </div>
     </div>
   );

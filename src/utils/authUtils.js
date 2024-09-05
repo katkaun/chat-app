@@ -76,27 +76,29 @@ export const fetchJwtToken = async (payload) => {
       }
     };
 
-export const decodeJwtToken = (token) => {
-  try {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
-    );
-    const decoded = JSON.parse(jsonPayload);
-
-    const currentTime = Math.floor(Date.now() / 1000);
-    if (decoded.exp && decoded.exp < currentTime) {
-      console.warn("Token has expired");
-      return null;
-    }
-
-    return decoded;
-  } catch (error) {
-    console.error("Error decoding JWT token:", error.message);
-    return null;
-  }
-};
+    export const decodeJwtToken = (token) => {
+      try {
+        const base64Url = token.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split("")
+            .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+            .join("")
+        );
+        const decoded = JSON.parse(jsonPayload);
+    
+        console.log("Decoded Token:", decoded); // Debugging line
+    
+        const currentTime = Math.floor(Date.now() / 1000);
+        if (decoded.exp && decoded.exp < currentTime) {
+          console.warn("Token has expired");
+          return null;
+        }
+    
+        return decoded;
+      } catch (error) {
+        console.error("Error decoding JWT token:", error.message);
+        return null;
+      }
+    };
