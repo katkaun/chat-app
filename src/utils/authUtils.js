@@ -50,55 +50,55 @@ export const registerUser = async (userData) => {
 };
 
 export const fetchJwtToken = async (payload) => {
-      try {
-        const response = await fetch(`${BASE_URL}/auth/token`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-    
-        if (!response.ok) {
-          const data = await response.json();
-          throw new Error(data.error || "Login failed");
-        }
-    
-        const result = await response.json();
-        console.log("Full login response:", result);
-         
-        if (result.token) {
-          localStorage.setItem("jwtToken", result.token);
-        }
+  try {
+    const response = await fetch(`${BASE_URL}/auth/token`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
 
-        return result;
-      } catch (error) {
-        console.error("Error logging in user:", error.message);
-        throw error;
-      }
-    };
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.error || "Login failed");
+    }
 
-    export const decodeJwtToken = (token) => {
-      try {
-        const base64Url = token.split(".")[1];
-        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-        const jsonPayload = decodeURIComponent(
-          atob(base64)
-            .split("")
-            .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-            .join("")
-        );
-        const decoded = JSON.parse(jsonPayload);
-    
-        console.log("Decoded Token:", decoded); // Debugging line
-    
-        const currentTime = Math.floor(Date.now() / 1000);
-        if (decoded.exp && decoded.exp < currentTime) {
-          console.warn("Token has expired");
-          return null;
-        }
-    
-        return decoded;
-      } catch (error) {
-        console.error("Error decoding JWT token:", error.message);
-        return null;
-      }
-    };
+    const result = await response.json();
+    console.log("Full login response:", result);
+
+    if (result.token) {
+      localStorage.setItem("jwtToken", result.token);
+    }
+
+    return result;
+  } catch (error) {
+    console.error("Error logging in user:", error.message);
+    throw error;
+  }
+};
+
+export const decodeJwtToken = (token) => {
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    const decoded = JSON.parse(jsonPayload);
+
+    console.log("Decoded Token:", decoded); // Debugging line
+
+    const currentTime = Math.floor(Date.now() / 1000);
+    if (decoded.exp && decoded.exp < currentTime) {
+      console.warn("Token has expired");
+      return null;
+    }
+
+    return decoded;
+  } catch (error) {
+    console.error("Error decoding JWT token:", error.message);
+    return null;
+  }
+};

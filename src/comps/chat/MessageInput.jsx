@@ -1,15 +1,14 @@
 import React, { useContext, useState } from "react";
-import styles from "../../css/Chat.module.css";
 import AuthContext from "../../context/AuthProvider";
 import { useChat } from "../../context/ChatContext";
 
 const MessageInput = () => {
   const { auth, BASE_URL } = useContext(AuthContext);
-  const {selectedConversation, fetchMessages} = useChat();
+  const { selectedConversation, fetchMessages } = useChat();
   const [newMessage, setNewMessage] = useState("");
 
   const handleSendMessage = async () => {
-    if(!newMessage.trim()) return;
+    if (!newMessage.trim()) return;
 
     try {
       const response = await fetch(`${BASE_URL}/messages`, {
@@ -47,7 +46,7 @@ const MessageInput = () => {
   };
 
   return (
-<div className="bg-gray-200 border-t border-gray-300 p-2">
+    <div className="bg-gray-200 border-t border-gray-300 p-2">
       <form onSubmit={handleSubmit} className="flex">
         <input
           type="text"
@@ -56,10 +55,7 @@ const MessageInput = () => {
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
         />
-        <button
-          type="submit"
-          className="btn btn-primary ml-2"
-        >
+        <button type="submit" className="btn btn-primary ml-2">
           Send
         </button>
       </form>

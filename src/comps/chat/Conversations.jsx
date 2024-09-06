@@ -1,4 +1,3 @@
-import React, { useContext } from "react";
 import styles from "../../css/Chat.module.css";
 import { useChat } from "../../context/ChatContext";
 
@@ -11,7 +10,7 @@ const Conversations = () => {
       <ul>
         {conversations.map((conversationId, index) => (
           <li
-            key={`conversation-${conversationId}-${index}`}  
+            key={`conversation-${conversationId}-${index}`}
             className={styles.conversation}
             onClick={() => setSelectedConversation(conversationId)}
           >
@@ -20,7 +19,7 @@ const Conversations = () => {
         ))}
         {receivedInvites.map((invite, idx) => (
           <li
-            key={`invite-${invite.conversationId}-${idx}`}  
+            key={`invite-${invite.conversationId}-${idx}`}
             className={styles.conversation}
             onClick={() => setSelectedConversation(invite.conversationId)}
           >

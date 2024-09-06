@@ -1,20 +1,18 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import AuthContext from "../../context/AuthProvider";
-import styles from "../../css/Chat.module.css";
-import DeleteIcon from "../DeleteIcon";
 import { useChat } from "../../context/ChatContext";
+import DeleteIcon from "../svg/DeleteIcon";
 
 const Messages = () => {
   const { selectedConversation, messages, updateMessages, deleteMessage } =
     useChat();
-  const { auth, BASE_URL } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
 
   useEffect(() => {
     if (selectedConversation) {
       updateMessages();
     }
   }, [selectedConversation, auth.token]);
-
 
   return (
     <div className="flex-1 overflow-y-auto p-4">

@@ -1,16 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
-import AuthContext from "../context/AuthProvider";
+import AuthContext from "../../context/AuthProvider";
 import ImgUploader from "./ImgUploader";
 
 const ProfileForm = ({ onClose }) => {
   const { auth, updateUser } = useContext(AuthContext);
-  const [newUsername, setNewUsername] = useState(auth.username || ""); // Initialize with auth values
-  const [newEmail, setNewEmail] = useState(auth.email || ""); // Initialize with auth values
+  const [newUsername, setNewUsername] = useState(auth.username || "");
+  const [newEmail, setNewEmail] = useState(auth.email || "");
   const [newAvatar, setNewAvatar] = useState(auth.avatar || "");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
-
 
   useEffect(() => {
     setNewUsername(auth.username || "");
@@ -20,8 +19,17 @@ const ProfileForm = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!newUsername.trim()) {
+      setError("Username is empty. Please update or go back");
+      return;
+    }
+    if (!newEmail.trim()) {
+      setError("Email is empty. Please update or go back");
+      return;
+    }
     setLoading(true);
-    setShowToast(false); 
+    setShowToast(false);
 
     try {
       const updatedUser = {
@@ -32,7 +40,7 @@ const ProfileForm = ({ onClose }) => {
 
       await updateUser(updatedUser);
       setError("");
-      setShowToast(true); // Show the toast message
+      setShowToast(true);
       setTimeout(() => onClose(), 2000);
     } catch (error) {
       setError("Failed to update user details: " + error.message);
@@ -48,7 +56,7 @@ const ProfileForm = ({ onClose }) => {
   console.log("Submitting user data:", {
     username: newUsername,
     email: newEmail,
-    avatar: newAvatar
+    avatar: newAvatar,
   });
 
   return (
@@ -66,9 +74,12 @@ const ProfileForm = ({ onClose }) => {
         <div className="mb-4">
           <ImgUploader onUploadSuccess={handleUploadSuccess} />
         </div>
-        
+
         <div className="mb-4">
-          <label htmlFor="username" className="block text-sm font-medium text-gray-200">
+          <label
+            htmlFor="username"
+            className="block text-sm font-medium text-gray-200"
+          >
             Username
           </label>
           <input
@@ -77,11 +88,14 @@ const ProfileForm = ({ onClose }) => {
             value={newUsername}
             onChange={(e) => setNewUsername(e.target.value)}
             className="block w-full mt-1 text-sm border-gray-300 rounded-md shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50"
-            style={{ color: 'black', backgroundColor: 'white' }}
+            style={{ color: "black", backgroundColor: "white" }}
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-200">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-200"
+          >
             Email
           </label>
           <input
@@ -90,7 +104,7 @@ const ProfileForm = ({ onClose }) => {
             value={newEmail}
             onChange={(e) => setNewEmail(e.target.value)}
             className="block w-full mt-1 text-sm border-gray-300 rounded-md shadow-sm focus:border-sky-500 focus:ring focus:ring-sky-500 focus:ring-opacity-50"
-            style={{ color: 'black', backgroundColor: 'white' }}
+            style={{ color: "black", backgroundColor: "white" }}
           />
         </div>
         {error && <p className="text-red-400 text-xs mb-4">{error}</p>}

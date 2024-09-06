@@ -1,5 +1,5 @@
 .container {
-  display: flex; 
+  display: flex;
   height: 85vh;
   width: 97%;
   overflow: hidden;
@@ -8,7 +8,7 @@
 }
 
 .customBackground {
-  background-color: #3e3c61; 
+  background-color: #3e3c61;
 }
 
 .chatWindow {
@@ -23,21 +23,22 @@
 .conversation {
   display: flex;
   align-items: center;
-  padding: 10px; 
-  margin: 10px; 
-  border-radius: 8px; 
-  cursor: pointer; 
-  transition: background-color 0.3s ease; 
+  padding: 10px;
+  margin: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .conversation.active {
-  background-color: #4c4a7a; 
+  background-color: #4c4a7a;
 }
 
 .conversation:hover {
-  background-color: #4c4a7a; 
+  background-color: #4c4a7a;
 }
 
+/* fixa så den stannar kvar */
 .chatInfo {
   height: 50px;
   background-color: #5d5b8d;
@@ -64,4 +65,3 @@
   height: 100%;
   object-fit: cover;
 }
-

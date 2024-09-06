@@ -1,17 +1,16 @@
 import React, { useContext } from "react";
-import AuthContext from "../context/AuthProvider";
+import AuthContext from "../../context/AuthProvider";
 
 const Navbar = () => {
   const { auth } = useContext(AuthContext);
 
-  if(!auth.token) {
+  if (!auth.token) {
     return null;
   }
 
   return (
     <div className="navbar bg-base-100 navbar-fixed-top">
       <div className="flex-none">
-        {/* This is the button that triggers the side nav */}
         <label htmlFor="my-drawer" className="btn btn-square btn-ghost">
           <svg
             xmlns="http://www.w3.org/2000/svg"

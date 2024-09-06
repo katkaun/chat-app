@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   fetchCsrfToken,
@@ -42,8 +42,7 @@ export const AuthProvider = ({ children }) => {
 
       setAuth({ token, userId: id, username: user, avatar, email, invite });
 
-      if (invite) 
-      navigate("/chat");
+      if (invite) navigate("/chat");
     } catch (error) {
       console.error("Login error:", error.message);
       throw error;

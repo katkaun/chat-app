@@ -20,7 +20,7 @@ const ImgUploader = ({ onUploadSuccess }) => {
         body: formData,
       });
 
-      console.log("Response Status:", response.status); // Logga status
+      // console.log("Response Status:", response.status);
       if (!response.ok) {
         const responseBody = await response.text();
         console.error("API Error Response:", responseBody);
@@ -28,22 +28,21 @@ const ImgUploader = ({ onUploadSuccess }) => {
       }
 
       const data = await response.json();
-      console.log("API Response Data:", data); // Logga data
+      // console.log("API Response Data:", data);
       return data.data.url;
     } catch (error) {
       console.error("Upload failed:", error);
       throw new Error("Upload failed: " + error.message);
     }
   };
-  
+
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
       setNewFile(file);
       const objectUrl = URL.createObjectURL(file);
       setPreviewUrl(objectUrl);
-  
-      // Clean up object URL when the component unmounts
+
       return () => URL.revokeObjectURL(objectUrl);
     }
   };
@@ -68,15 +67,12 @@ const ImgUploader = ({ onUploadSuccess }) => {
         onUploadSuccess(imageUrl);
       }
       setUploadSuccess(true);
-      
     } catch (error) {
       setError("Upload failed: " + error.message);
     } finally {
       setLoading(false);
     }
   };
-
-
 
   return (
     <div>
@@ -113,12 +109,9 @@ const ImgUploader = ({ onUploadSuccess }) => {
         <p className="text-green-500 text-xs mt-2">Upload successful!</p>
       )}
 
-      {error && (
-        <p className="text-red-400 text-xs mt-2">{error}</p>
-      )}
+      {error && <p className="text-red-400 text-xs mt-2">{error}</p>}
     </div>
   );
 };
 
 export default ImgUploader;
-

@@ -1,4 +1,4 @@
-import ProfileForm from "./ProfileForm";
+import ProfileForm from "../user/ProfileForm";
 
 const Modal = ({ closeModal }) => {
   return (

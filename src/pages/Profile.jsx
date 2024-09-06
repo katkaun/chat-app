@@ -1,13 +1,13 @@
 import { useState, useContext, useEffect } from "react";
 import AuthContext from "../context/AuthProvider";
-import PenIcon from "../comps/PenIcon";
-import Modal from "../comps/Modal";
-import ImgUploader from "../comps/ImgUploader";
-import ProfileForm from "../comps/ProfileForm";
-import DeleteAccount from "../comps/DeleteAccount";
+import PenIcon from "../comps/svg/PenIcon";
+import Modal from "../comps/layout/Modal";
+import ImgUploader from "../comps/user/ImgUploader";
+import ProfileForm from "../comps/user/ProfileForm";
+import DeleteAccount from "../comps/user/DeleteAccount";
 
 const Profile = () => {
-  const { auth, updateUser } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
   const [modalOpen, setModalOpen] = useState(false);
   const [avatar, setAvatar] = useState(auth.avatar);
 
@@ -17,7 +17,7 @@ const Profile = () => {
 
   const handleUploadSuccess = (imageUrl) => {
     setAvatar(imageUrl);
-    setModalOpen(false); // Close the modal on successful upload
+    setModalOpen(false);
   };
 
   return (

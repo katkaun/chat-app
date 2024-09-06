@@ -8,11 +8,9 @@ const ChatPanel = () => {
       className={`${styles.customBackground} text-white p-4 h-full overflow-auto`}
     >
       {" "}
-      <h3 className="text-lg font-semibold mb-6">Conversations</h3>
+      <h3 className="text-lg font-semibold mb-6">Start Chatting</h3>
       <InviteUser />
-        <Conversations />
-        <div className="border-b border-gray-600 mb-3">
-      </div>
+      <Conversations />
     </div>
   );
 };

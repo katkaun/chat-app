@@ -2,7 +2,6 @@ import styles from "../css/Chat.module.css";
 import Messages from "../comps/chat/Messages";
 import MessageInput from "../comps/chat/MessageInput";
 import ChatPanel from "../comps/chat/ChatPanel";
-import Conversations from "../comps/chat/Conversations";
 import { ChatProvider } from "../context/ChatContext";
 import { useContext } from "react";
 import AuthContext from "../context/AuthProvider";
@@ -34,4 +33,3 @@ const Chat = () => {
 };
 
 export default Chat;
-

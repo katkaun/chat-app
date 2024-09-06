@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "../context/AuthProvider"; 
+import AuthContext from "../context/AuthProvider";
 import { fetchCsrfToken } from "../utils/authUtils";
 
 const DEFAULT_AVATAR_URL =
@@ -36,7 +36,6 @@ const Register = () => {
     };
 
     if (!csrfToken) {
-      // Only fetch if token is not already present
       getCsrfToken();
     }
   }, [csrfToken]);
